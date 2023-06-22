@@ -1,0 +1,1 @@
+module.exports.MONGODB ="mongodb+srv://cars-dev:t7XU-Y_sP3P5_K!@cluster0.xnun17f.mongodb.net/cars-dev?retryWrites=true&w=majority";
