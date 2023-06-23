@@ -51,7 +51,7 @@ export default function Calculator() {
     } else if (side == "right") {
       setSelectedCarsRight([...selectedCarsRight, cars[index]]);
       setValuesRight(
-        values + cars[index].value[cars[index].value.length - 1].amount
+        valuesRight + cars[index].value[cars[index].value.length - 1].amount
       );
     }
     handleClose();
