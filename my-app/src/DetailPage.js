@@ -78,39 +78,43 @@ export default function DetailPage() {
   };
 
   const handleSubmit = async () => {
-    const newDate = addDays(
-      new Date(carDetail.value[carDetail.value.length - 1].date),
-      1
-    );
+    const isPrev = localStorage.getItem(carDetail._id);
 
-    if (newDate < new Date()) {
-      const response = (
-        await axios.post(`http://localhost:3001/update-car-value`, {
-          _id: carDetail._id,
-          amount: updatedValue,
-        })
-      ).data;
-      if (response.success) {
-        setCarDetail(response.car);
-        const lables = response.car?.value?.map((element) => element.date);
-        const data = response.car?.value?.map((element) => element.amount);
-        setDatasets({
-          labels: lables,
-          datasets: [
-            {
-              label: "Value",
-              data: data,
-              borderColor: "rgb(255, 99, 132)",
-              backgroundColor: "rgba(255, 99, 132, 0.5)",
-            },
-          ],
-        });
-        swal("Done...", "Value updated", "success");
-      } else {
-        swal("Oops...", "Database is down", "error");
+    if (isPrev) {
+      const newDate = addDays(new Date(isPrev), 1);
+      if (newDate > new Date()) {
+        swal("Oops...", "New value can only updated after 24 hours", "error");
+        return;
       }
+    }
+
+    const response = (
+      await axios.post(`http://localhost:3001/update-car-value`, {
+        _id: carDetail._id,
+        amount: updatedValue,
+      })
+    ).data;
+    if (response.success) {
+      setCarDetail(response.car);
+      const lables = response.car?.value?.map((element) =>
+        format(new Date(element.date), "yyyy-MM-dd")
+      );
+      const data = response.car?.value?.map((element) => element.amount);
+      setDatasets({
+        labels: lables,
+        datasets: [
+          {
+            label: "Value",
+            data: data,
+            borderColor: "rgb(255, 99, 132)",
+            backgroundColor: "rgba(255, 99, 132, 0.5)",
+          },
+        ],
+      });
+      localStorage.setItem(carDetail._id, new Date());
+      swal("Done...", "Value updated", "success");
     } else {
-      swal("Oops...", "New value can only updated after 24 hours", "error");
+      swal("Oops...", "Database is down", "error");
     }
   };
 

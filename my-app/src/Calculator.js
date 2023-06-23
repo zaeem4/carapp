@@ -118,7 +118,7 @@ export default function Calculator() {
                         component="img"
                         src={`http://localhost:3001/${car.image}`}
                         alt="car image"
-                        sx={{ height: 200, width: "auto" }}
+                        sx={{ height: 200, width: "auto", cursor: "pointer" }}
                         key={index}
                         onClick={() => {
                           removeCar(
@@ -164,7 +164,7 @@ export default function Calculator() {
                         component="img"
                         src={`http://localhost:3001/${car.image}`}
                         alt="car image"
-                        sx={{ height: 200, width: "auto" }}
+                        sx={{ height: 200, width: "auto", cursor: "pointer" }}
                         key={index}
                         onClick={() => {
                           removeCarRight(

@@ -11,9 +11,10 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Grid from "@mui/material/Grid";
-import CustomCard from "./Card";
-
+import swal from "sweetalert";
 import axios from "axios";
+
+import CustomCard from "./Card";
 
 export default function Home() {
   const [sortBy, setSortBy] = React.useState("");
@@ -48,7 +49,11 @@ export default function Home() {
         max: max,
       })
     ).data;
-    setCars(response.cars);
+    if (response.success) {
+      setCars(response.cars);
+    } else {
+      swal("Oops...", "Database is down", "error");
+    }
   };
 
   useEffect(() => {

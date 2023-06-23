@@ -37,6 +37,7 @@ export default function CustomCard({
         width="100%"
         image={`http://localhost:3001/${image}`}
         alt="car image"
+        sx={{ maxHeight: 170 }}
       />
       <CardContent>
         <Typography

@@ -133,13 +133,74 @@ function Layout(props) {
       <Box
         sx={{
           width: "100%",
-          backgroundColor: "rbg(33, 37, 41)",
+          backgroundColor: "#212529",
+          paddingX: { xs: 3, md: 20 },
+          paddingY: { xs: 5, md: 10 },
         }}
       >
         <Grid container spacing={2}>
-          <Grid item xs={4}></Grid>
-          <Grid item xs={4}></Grid>
-          <Grid item xs={4}></Grid>
+          <Grid item xs={12} md={2}>
+            <Typography
+              sx={{ fontWeight: "bold", color: "white" }}
+              variant="h5"
+              component="div"
+            >
+              Car App
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={2}>
+            <Typography
+              sx={{ fontWeight: "bold", ml: 2, color: "white" }}
+              variant="h5"
+              component="div"
+            >
+              Links
+            </Typography>
+
+            <List>
+              <ListItem>
+                <ListItemButton component="a" href="/">
+                  <ListItemText primary="Values" sx={{ color: "#0d6efd" }} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton component="a" href="/calculator">
+                  <ListItemText
+                    primary="Calculator"
+                    sx={{ color: "#0d6efd" }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </Grid>
+          <Grid item xs={12} md={2}>
+            <Typography
+              sx={{ fontWeight: "bold", ml: 2, color: "white" }}
+              variant="h5"
+              component="div"
+            >
+              Legals
+            </Typography>
+
+            <List>
+              <ListItem>
+                <ListItemButton component="a" href="#">
+                  <ListItemText
+                    primary="Privacy Policy"
+                    sx={{ color: "#0d6efd" }}
+                  />
+                </ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton component="a" href="#">
+                  <ListItemText
+                    primary="Terms & Conditions"
+                    sx={{ color: "#0d6efd" }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </Grid>
         </Grid>
       </Box>
     </>
