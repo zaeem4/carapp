@@ -69,7 +69,7 @@ function Layout(props) {
     <>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar component="nav">
+        <AppBar component="nav" sx={{ background: "#f8f9fa", color: "black" }}>
           <Toolbar>
             <IconButton
               color="inherit"
@@ -91,7 +91,7 @@ function Layout(props) {
               {navItems.map((item) => (
                 <Button
                   key={item}
-                  sx={{ color: "#fff" }}
+                  sx={{ color: "black" }}
                   onClick={() => {
                     handleClick(item);
                   }}
