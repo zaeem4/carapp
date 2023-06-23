@@ -127,7 +127,7 @@ export default function DetailPage() {
       <Box
         sx={{
           width: "100%",
-          marginY: "4rem",
+          marginY: { xs: "2rem", md: "4rem" },
         }}
       >
         <Grid container spacing={2}>
@@ -137,7 +137,6 @@ export default function DetailPage() {
                 p: { xs: 1, md: 4 },
                 maxWidth: "100%",
                 margin: "auto",
-                marginLeft: "1rem",
                 background: "#FFFFFF",
                 border: "1px solid lightgray",
               }}
@@ -196,7 +195,6 @@ export default function DetailPage() {
           <Grid item xs={12} md={4}>
             <Box
               sx={{
-                marginRight: "1rem",
                 background: "#FFFFFF",
                 border: "1px solid lightgray",
               }}

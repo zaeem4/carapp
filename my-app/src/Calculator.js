@@ -96,7 +96,7 @@ export default function Calculator() {
           margin: "auto",
           textAlign: "center",
           p: { xs: 1, md: 4 },
-          marginY: "4rem",
+          marginY: { xs: "2rem", md: "4rem" },
         }}
       >
         <Typography variant="h3" gutterBottom>

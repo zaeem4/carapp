@@ -124,7 +124,7 @@ function Layout(props) {
         </Box>
         <Box
           component="main"
-          sx={{ p: 3, background: "#e7f3ff", width: "100%" }}
+          sx={{ p: { xs: 0, md: 2 }, background: "#e7f3ff", width: "100%" }}
         >
           <Toolbar />
           <Outlet />
