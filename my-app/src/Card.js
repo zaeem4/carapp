@@ -27,12 +27,10 @@ export default function CustomCard({
         margin: "auto",
         textAlign: "center",
         margin: { xs: 2, md: 4 },
+        border: "1px solid gray",
       }}
     >
-      <CardHeader
-        title={`${color} (${name})`}
-        sx={{ background: "lightblue" }}
-      />
+      <CardHeader title={`${color} (${name})`} sx={{ background: "#0DCAF0" }} />
       <CardMedia
         component="img"
         height="auto"
@@ -41,9 +39,14 @@ export default function CustomCard({
         alt="car image"
       />
       <CardContent>
-        <Typography variant="h5" gutterBottom sx={{ color: "green" }}>
+        <Typography
+          variant="h5"
+          gutterBottom
+          sx={{ color: "#198754", fontWeight: "bold" }}
+        >
           Type : {type}
         </Typography>
+        <br />
         <Button
           variant="contained"
           onClick={() => {

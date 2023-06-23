@@ -14,12 +14,14 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "latest",
     "chart.js": "^4.3.0",
+    "date-fns": "^2.30.0",
     "react": "latest",
     "react-axios": "^2.0.6",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "latest",
     "react-router-dom": "^6.13.0",
-    "react-scripts": "latest"
+    "react-scripts": "latest",
+    "sweetalert": "^2.1.2"
   },
   "browserslist": {
     "production": [

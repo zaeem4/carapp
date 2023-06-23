@@ -60,7 +60,7 @@ export default function Home() {
       <Box
         sx={{
           width: "100%",
-          backgroundColor: "#dee2e6",
+          backgroundColor: "#f8fafc",
         }}
       >
         <Box
@@ -106,7 +106,7 @@ export default function Home() {
       <Box
         sx={{
           width: "100%",
-          backgroundColor: "#dee2e6",
+          backgroundColor: "#FFFFFF",
         }}
       >
         <Grid container spacing={2}>

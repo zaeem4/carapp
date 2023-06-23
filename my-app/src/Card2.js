@@ -33,9 +33,14 @@ export default function CustomCard2({
         alt="car image"
       />
       <CardContent>
-        <Typography variant="h6" gutterBottom sx={{ color: "green" }}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          sx={{ color: "#198754", fontWeight: "bold" }}
+        >
           Type : {type}
         </Typography>
+        <br />
         <Button
           variant="contained"
           onClick={() => {

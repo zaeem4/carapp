@@ -14,6 +14,8 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { format, addDays } from "date-fns";
+import swal from "sweetalert";
 
 import {
   Chart as ChartJS,
@@ -52,7 +54,9 @@ export default function DetailPage() {
       navigate("/");
     } else {
       setCarDetail({ _id, name, color, type, image, value, price, max_speed });
-      const lables = value?.map((element) => element.date);
+      const lables = value?.map((element) =>
+        format(new Date(element.date), "yyyy-MM-dd")
+      );
       const data = value?.map((element) => element.amount);
 
       setDatasets({
@@ -74,26 +78,40 @@ export default function DetailPage() {
   };
 
   const handleSubmit = async () => {
-    const response = (
-      await axios.post(`http://localhost:3001/update-car-value`, {
-        _id: carDetail._id,
-        amount: updatedValue,
-      })
-    ).data;
-    setCarDetail(response.car);
-    const lables = response.car?.value?.map((element) => element.date);
-    const data = response.car?.value?.map((element) => element.amount);
-    setDatasets({
-      labels: lables,
-      datasets: [
-        {
-          label: "Value",
-          data: data,
-          borderColor: "rgb(255, 99, 132)",
-          backgroundColor: "rgba(255, 99, 132, 0.5)",
-        },
-      ],
-    });
+    const newDate = addDays(
+      new Date(carDetail.value[carDetail.value.length - 1].date),
+      1
+    );
+
+    if (newDate < new Date()) {
+      const response = (
+        await axios.post(`http://localhost:3001/update-car-value`, {
+          _id: carDetail._id,
+          amount: updatedValue,
+        })
+      ).data;
+      if (response.success) {
+        setCarDetail(response.car);
+        const lables = response.car?.value?.map((element) => element.date);
+        const data = response.car?.value?.map((element) => element.amount);
+        setDatasets({
+          labels: lables,
+          datasets: [
+            {
+              label: "Value",
+              data: data,
+              borderColor: "rgb(255, 99, 132)",
+              backgroundColor: "rgba(255, 99, 132, 0.5)",
+            },
+          ],
+        });
+        swal("Done...", "Value updated", "success");
+      } else {
+        swal("Oops...", "Database is down", "error");
+      }
+    } else {
+      swal("Oops...", "New value can only updated after 24 hours", "error");
+    }
   };
 
   const options = {
@@ -105,7 +123,7 @@ export default function DetailPage() {
       <Box
         sx={{
           width: "100%",
-          backgroundColor: "#dee2e6",
+          marginY: "4rem",
         }}
       >
         <Grid container spacing={2}>
@@ -116,7 +134,8 @@ export default function DetailPage() {
                 maxWidth: "100%",
                 margin: "auto",
                 marginLeft: "1rem",
-                background: "whitesmoke",
+                background: "#FFFFFF",
+                border: "1px solid lightgray",
               }}
             >
               <Stack direction="column">
@@ -173,31 +192,42 @@ export default function DetailPage() {
           <Grid item xs={12} md={4}>
             <Box
               sx={{
-                p: { xs: 1, md: 4 },
                 marginRight: "1rem",
-                background: "whitesmoke",
+                background: "#FFFFFF",
+                border: "1px solid lightgray",
               }}
             >
-              <Typography variant="h5" sx={{ color: "black" }}>
+              <Typography
+                variant="h5"
+                sx={{
+                  color: "black",
+                  background: "lightgray",
+                  p: { xs: 1, nd: 2 },
+                  border: "1px solid lightgray",
+                }}
+              >
                 Update Value
               </Typography>
               <br />
-              <TextField
-                label="value"
-                id="value"
-                value={updatedValue}
-                onChange={handleUpdatedValue}
-                fullWidth
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <br />
-              <br />
-              <Button variant="contained" onClick={handleSubmit}>
-                Update
-              </Button>
+
+              <Box sx={{ p: { xs: 1, md: 3 } }}>
+                <TextField
+                  label="value"
+                  id="value"
+                  value={updatedValue}
+                  onChange={handleUpdatedValue}
+                  fullWidth
+                  type="number"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                <br />
+                <br />
+                <Button variant="contained" onClick={handleSubmit}>
+                  Update
+                </Button>
+              </Box>
             </Box>
           </Grid>
         </Grid>

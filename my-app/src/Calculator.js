@@ -69,6 +69,20 @@ export default function Calculator() {
     setCars(response.cars);
   };
 
+  const removeCar = (index, value) => {
+    const temp = selectedCars;
+    temp.splice(index, 1);
+    setSelectedCars(temp);
+    setValues(values - value);
+  };
+
+  const removeCarRight = (index, value) => {
+    const temp = selectedCarsRight;
+    temp.splice(index, 1);
+    setSelectedCarsRight(temp);
+    setValuesRight(valuesRight - value);
+  };
+
   useEffect(() => {
     getAllCars();
   }, []);
@@ -78,17 +92,23 @@ export default function Calculator() {
       <Box
         sx={{
           width: "100%",
-          backgroundColor: "#dee2e6",
+          backgroundColor: "#f8fafc",
           margin: "auto",
           textAlign: "center",
           p: { xs: 1, md: 4 },
+          marginY: "4rem",
         }}
       >
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h3" gutterBottom>
           Calculator
         </Typography>
         <Grid container sx={{ columnGap: "1rem", rowGap: "1rem" }}>
-          <Grid item xs={12} md={6} sx={{ background: "whitesmoke" }}>
+          <Grid
+            item
+            xs={12}
+            md={6}
+            sx={{ background: "#f8fafc", border: "1px solid lightgray" }}
+          >
             <Grid container spacing={2} sx={{ alignItems: "center" }}>
               <Grid item xs={8}>
                 <Stack direction="column">
@@ -100,6 +120,12 @@ export default function Calculator() {
                         alt="car image"
                         sx={{ height: 200, width: "auto" }}
                         key={index}
+                        onClick={() => {
+                          removeCar(
+                            index,
+                            car.value[car.value.length - 1].amount
+                          );
+                        }}
                       />
                     );
                   })}
@@ -117,13 +143,18 @@ export default function Calculator() {
                 </IconButton>
               </Grid>
               <Grid Grid item xs={12}>
-                <Typography variant="h5" gutterBottom>
-                  values {values}
+                <Typography variant="h4" gutterBottom>
+                  Values {values}
                 </Typography>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={12} md={5.5} sx={{ background: "whitesmoke" }}>
+          <Grid
+            item
+            xs={12}
+            md={5.5}
+            sx={{ background: "#f8fafc", border: "1px solid lightgray" }}
+          >
             <Grid container spacing={2} sx={{ alignItems: "center" }}>
               <Grid item xs={8}>
                 <Stack direction="column">
@@ -135,6 +166,12 @@ export default function Calculator() {
                         alt="car image"
                         sx={{ height: 200, width: "auto" }}
                         key={index}
+                        onClick={() => {
+                          removeCarRight(
+                            index,
+                            car.value[car.value.length - 1].amount
+                          );
+                        }}
                       />
                     );
                   })}
@@ -152,8 +189,8 @@ export default function Calculator() {
                 </IconButton>
               </Grid>
               <Grid Grid item xs={12}>
-                <Typography variant="h5" gutterBottom>
-                  values {valuesRight}
+                <Typography variant="h4" gutterBottom>
+                  Values {valuesRight}
                 </Typography>
               </Grid>
             </Grid>
