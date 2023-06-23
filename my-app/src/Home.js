@@ -61,7 +61,11 @@ export default function Home() {
   }, [sortBy, min, max]);
 
   return (
-    <Container>
+    <Container
+      sx={{
+        marginY: { xs: "2rem", md: "4rem" },
+      }}
+    >
       <Box
         sx={{
           width: "100%",
