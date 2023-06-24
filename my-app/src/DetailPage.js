@@ -283,12 +283,13 @@ export default function DetailPage() {
                   {recentSubmissions.map((item, index) => {
                     return (
                       <CustomCard
+                        key={index}
                         _id={item.car._id}
                         name={item.car.name}
                         color={item.car.color}
                         type={item.car.type}
                         image={item.car.image}
-                        key={index}
+                        value={item.car.value}
                       />
                     );
                   })}

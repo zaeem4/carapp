@@ -5,11 +5,22 @@ import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import { subDays } from "date-fns";
 
 import Button from "@mui/material/Button";
 
-export default function CustomCard({ _id, name, color, type, image }) {
+export default function CustomCard3({ _id, name, color, type, image, value }) {
   const navigate = useNavigate();
+  const [values, SetValues] = React.useState(0);
+
+  React.useEffect(() => {
+    const dateFrom = subDays(new Date(), 30);
+    const filtered = value.filter((item) => new Date(item.date) > dateFrom);
+    const average =
+      filtered.reduce((a, b) => a + b.amount, 0) / filtered.length;
+
+    SetValues(Math.ceil(average));
+  }, []);
 
   return (
     <Card
@@ -22,7 +33,7 @@ export default function CustomCard({ _id, name, color, type, image }) {
       <CardMedia
         component="img"
         width="100%"
-        height="150"    
+        height="150"
         image={`http://localhost:3001/${image}`}
         alt="car image"
       />
@@ -33,6 +44,14 @@ export default function CustomCard({ _id, name, color, type, image }) {
           sx={{ color: "#198754", fontWeight: "bold" }}
         >
           Type : {type}
+        </Typography>
+        <br />
+        <Typography
+          variant="h6"
+          gutterBottom
+          sx={{ color: "#198754", fontWeight: "bold" }}
+        >
+          Value : {values}
         </Typography>
         <br />
         <Button

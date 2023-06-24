@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -17,7 +16,6 @@ export default function CustomCard2({
   pushCar,
   index,
 }) {
-  const navigate = useNavigate();
 
   return (
     <Card sx={{ p: { xs: 2, md: 4 } }}>
