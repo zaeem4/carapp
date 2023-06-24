@@ -89,7 +89,7 @@ export default function DetailPage() {
     } else {
       getDetails(_id);
     }
-  }, []);
+  }, [_id]);
 
   const handleUpdatedValue = (event) => {
     setUpdatedValue(event.target.value);
