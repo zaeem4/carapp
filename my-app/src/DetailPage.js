@@ -78,6 +78,11 @@ export default function DetailPage() {
   };
 
   const handleSubmit = async () => {
+    if (calculateAVG(carDetail, updatedValue) > 0.35) {
+      swal("Oops...", "Value is greater than 35% threshold", "error");
+      return;
+    }
+
     const isPrev = localStorage.getItem(carDetail._id);
 
     if (isPrev) {
@@ -117,6 +122,15 @@ export default function DetailPage() {
       swal("Oops...", "Database is down", "error");
     }
   };
+
+  const calculateAVG = (carDetail, updatedValue) => {
+    var d = new Date();
+    d.setDate(d.getDate() - 30);
+    const filtered = carDetail.value.filter(item => new Date(item.date).getTime() > d.getTime());
+    const priceSum = filtered.reduce((accumulator, item) => { return accumulator + item.amount }, 0);
+
+    return ((updatedValue - priceSum) / priceSum);
+  }
 
   const options = {
     responsive: true,
