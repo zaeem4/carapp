@@ -51,18 +51,7 @@ export default function CustomCard({
         <Button
           variant="contained"
           onClick={() => {
-            navigate(`/details/${_id}`, {
-              state: {
-                _id,
-                name,
-                color,
-                type,
-                image,
-                value,
-                price,
-                max_speed,
-              },
-            });
+            navigate(`/details/${_id}`);
           }}
         >
           View More

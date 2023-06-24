@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useEffect } from "react";
+import { subDays } from "date-fns";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -43,16 +44,19 @@ export default function Calculator() {
   };
 
   const pushCar = (index) => {
+    const dateFrom = subDays(new Date(), 30);
+    const filtered = cars[index].value.filter(
+      (item) => new Date(item.date) > dateFrom
+    );
+    const average =
+      filtered.reduce((a, b) => a + b.amount, 0) / filtered.length;
+
     if (side === "left") {
       setSelectedCars([...selectedCars, cars[index]]);
-      setValues(
-        values + cars[index].value[cars[index].value.length - 1].amount
-      );
+      setValues(values + Math.ceil(average));
     } else if (side == "right") {
       setSelectedCarsRight([...selectedCarsRight, cars[index]]);
-      setValuesRight(
-        valuesRight + cars[index].value[cars[index].value.length - 1].amount
-      );
+      setValuesRight(valuesRight + Math.ceil(average));
     }
     handleClose();
   };
@@ -73,14 +77,22 @@ export default function Calculator() {
     const temp = selectedCars;
     temp.splice(index, 1);
     setSelectedCars(temp);
-    setValues(values - value);
+    const dateFrom = subDays(new Date(), 30);
+    const filtered = value.filter((item) => new Date(item.date) > dateFrom);
+    const average =
+      filtered.reduce((a, b) => a + b.amount, 0) / filtered.length;
+    setValues(values - Math.ceil(average));
   };
 
   const removeCarRight = (index, value) => {
     const temp = selectedCarsRight;
     temp.splice(index, 1);
     setSelectedCarsRight(temp);
-    setValuesRight(valuesRight - value);
+    const dateFrom = subDays(new Date(), 30);
+    const filtered = value.filter((item) => new Date(item.date) > dateFrom);
+    const average =
+      filtered.reduce((a, b) => a + b.amount, 0) / filtered.length;
+    setValuesRight(valuesRight - Math.ceil(average));
   };
 
   useEffect(() => {
@@ -121,10 +133,7 @@ export default function Calculator() {
                         sx={{ height: 200, width: "auto", cursor: "pointer" }}
                         key={index}
                         onClick={() => {
-                          removeCar(
-                            index,
-                            car.value[car.value.length - 1].amount
-                          );
+                          removeCar(index, car.value);
                         }}
                       />
                     );
@@ -167,10 +176,7 @@ export default function Calculator() {
                         sx={{ height: 200, width: "auto", cursor: "pointer" }}
                         key={index}
                         onClick={() => {
-                          removeCarRight(
-                            index,
-                            car.value[car.value.length - 1].amount
-                          );
+                          removeCarRight(index, car.value);
                         }}
                       />
                     );

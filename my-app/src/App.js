@@ -10,7 +10,7 @@ export default function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="calculator" element={<Calculator />} />
-        <Route path="details/:id" element={<DetailPage />} />
+        <Route path="details/:_id" element={<DetailPage />} />
         <Route path="*" element={<NoMatch />} />
       </Route>
     </Routes>

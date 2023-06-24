@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -14,7 +14,7 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { format, addDays } from "date-fns";
+import { format, addDays, subDays } from "date-fns";
 import swal from "sweetalert";
 
 import {
@@ -42,22 +42,19 @@ ChartJS.register(
 import axios from "axios";
 
 export default function DetailPage() {
-  const { state } = useLocation();
   const navigate = useNavigate();
   const [updatedValue, setUpdatedValue] = React.useState(0);
   const [carDetail, setCarDetail] = React.useState({});
   const [datasets, setDatasets] = React.useState({ labels: [], datasets: [] });
+  const { _id } = useParams();
 
-  React.useEffect(() => {
-    const { _id, name, color, type, image, value, price, max_speed } = state;
-    if (!_id) {
-      navigate("/");
-    } else {
-      setCarDetail({ _id, name, color, type, image, value, price, max_speed });
-      const lables = value?.map((element) =>
+  const getDetails = async (_id) => {
+    const response = (await axios.get(`http://localhost:3001/car/${_id}`)).data;
+    if (response.success) {
+      const lables = response.car.value?.map((element) =>
         format(new Date(element.date), "yyyy-MM-dd")
       );
-      const data = value?.map((element) => element.amount);
+      const data = response.car.value?.map((element) => element.amount);
 
       setDatasets({
         labels: lables,
@@ -70,6 +67,22 @@ export default function DetailPage() {
           },
         ],
       });
+      const dateFrom = subDays(new Date(), 30);
+      const filtered = response.car.value.filter(
+        (item) => new Date(item.date) > dateFrom
+      );
+      const average =
+        filtered.reduce((a, b) => a + b.amount, 0) / filtered.length;
+      response.car.value = Math.ceil(average);
+      setCarDetail(response.car);
+    }
+  };
+
+  React.useEffect(() => {
+    if (!_id) {
+      navigate("/");
+    } else {
+      getDetails(_id);
     }
   }, []);
 
@@ -78,6 +91,11 @@ export default function DetailPage() {
   };
 
   const handleSubmit = async () => {
+    if (updatedValue > Math.ceil(carDetail.value) * 0.35) {
+      swal("Oops...", "New value exceded 35% limit", "error");
+      return;
+    }
+
     const isPrev = localStorage.getItem(carDetail._id);
 
     if (isPrev) {
@@ -95,7 +113,6 @@ export default function DetailPage() {
       })
     ).data;
     if (response.success) {
-      setCarDetail(response.car);
       const lables = response.car?.value?.map((element) =>
         format(new Date(element.date), "yyyy-MM-dd")
       );
@@ -111,6 +128,14 @@ export default function DetailPage() {
           },
         ],
       });
+      const dateFrom = subDays(new Date(), 30);
+      const filtered = response.car.value.filter(
+        (item) => new Date(item.date) > dateFrom
+      );
+      const average =
+        filtered.reduce((a, b) => a + b.amount, 0) / filtered.length;
+      response.car.value = Math.ceil(average);
+      setCarDetail(response.car);
       localStorage.setItem(carDetail._id, new Date());
       swal("Done...", "Value updated", "success");
     } else {
@@ -172,10 +197,7 @@ export default function DetailPage() {
                         <TableCell component="th" scope="row">
                           {carDetail.name}
                         </TableCell>
-                        <TableCell align="center">
-                          {carDetail.value?.length > 0 &&
-                            carDetail.value[carDetail.value.length - 1].amount}
-                        </TableCell>
+                        <TableCell align="center">{carDetail.value}</TableCell>
                         <TableCell align="center">{carDetail.price}</TableCell>
                         <TableCell align="center">{carDetail.type}</TableCell>
                         <TableCell align="center">

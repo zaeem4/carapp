@@ -15,6 +15,7 @@ app.use(express.static("public"));
 app.post("/cars", cars.getAll);
 app.post("/car", cars.insert);
 app.post("/update-car-value", cars.updateVaue);
+app.get("/car/:id", cars.getById);
 
 app.get("/", (req, res) => {
   res.send("running");

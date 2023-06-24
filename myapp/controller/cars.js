@@ -61,8 +61,15 @@ const updateVaue = async (req, res) => {
   }
 };
 
+const getById = async (req, res) => {
+  const { id } = req.params;
+  const carData = await cars.find({ _id: id });
+  res.json({ success: true, car: carData.length > 0 ? carData[0] : {} });
+};
+
 module.exports = {
   getAll,
   insert,
   updateVaue,
+  getById,
 };
