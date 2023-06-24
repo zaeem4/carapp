@@ -279,7 +279,7 @@ export default function DetailPage() {
               </Typography>
 
               <Box sx={{ p: { xs: 1, md: 3 } }}>
-                <Stack direction="column">
+                <Stack direction="column" spacing={2}>
                   {recentSubmissions.map((item, index) => {
                     return (
                       <CustomCard

@@ -129,9 +129,6 @@ export default function Home() {
                     color={item.color}
                     type={item.type}
                     image={item.image}
-                    value={item.value}
-                    price={item.price}
-                    max_speed={item.max_speed}
                   />
                 </Grid>
               );

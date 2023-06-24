@@ -14,9 +14,6 @@ export default function CustomCard({
   color,
   type,
   image,
-  value,
-  price,
-  max_speed,
 }) {
   const navigate = useNavigate();
 
