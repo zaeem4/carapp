@@ -1,4 +1,5 @@
-const cars = require("../models/cars.js");
+const Cars = require("../models/cars.js");
+const Recents = require("../models/recents.js");
 
 const getAll = async (req, res) => {
   try {
@@ -21,7 +22,7 @@ const getAll = async (req, res) => {
         : {};
     const sorting = sort ? { [`${sort}`]: 1 } : { _id: -1 };
 
-    const carsData = await cars.find(query, null, { sort: sorting });
+    const carsData = await Cars.find(query, null, { sort: sorting });
     res.json({ success: true, cars: carsData });
   } catch (error) {
     console.log(error);
@@ -31,7 +32,7 @@ const getAll = async (req, res) => {
 
 const insert = async (req, res) => {
   try {
-    const carsData = await cars.create({
+    const carsData = await Cars.create({
       name: "car",
       color: "pink",
       type: "atlas",
@@ -50,11 +51,21 @@ const insert = async (req, res) => {
 const updateVaue = async (req, res) => {
   try {
     const { _id, amount } = req.body;
-    const doc = await cars.findById(_id);
+    const doc = await Cars.findById(_id);
     doc.value.push({ date: Date.now(), amount: amount });
     await doc.save();
-    const carData = await cars.findById(_id);
-    res.json({ success: true, car: carData });
+    const carData = await Cars.findById(_id);
+
+    const recents = await Recents.create({
+      value: amount,
+      car: _id,
+    });
+
+    const resentData = await Recents.find({}, null, {
+      sort: { created_on: -1 },
+    }).populate("car");
+
+    res.json({ success: true, car: carData, recent: resentData });
   } catch (error) {
     console.log(error);
     res.json({ success: false, error: error });
@@ -63,8 +74,15 @@ const updateVaue = async (req, res) => {
 
 const getById = async (req, res) => {
   const { id } = req.params;
-  const carData = await cars.find({ _id: id });
-  res.json({ success: true, car: carData.length > 0 ? carData[0] : {} });
+  const carData = await Cars.find({ _id: id });
+  const resentData = await Recents.find({}, null, {
+    sort: { created_on: -1 },
+  }).populate("car");
+  res.json({
+    success: true,
+    car: carData.length > 0 ? carData[0] : {},
+    recent: resentData,
+  });
 };
 
 module.exports = {

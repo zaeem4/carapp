@@ -17,6 +17,8 @@ import Button from "@mui/material/Button";
 import { format, addDays, subDays } from "date-fns";
 import swal from "sweetalert";
 
+import CustomCard from "./Card3";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -48,6 +50,8 @@ export default function DetailPage() {
   const [datasets, setDatasets] = React.useState({ labels: [], datasets: [] });
   const { _id } = useParams();
 
+  const [recentSubmissions, setRecentSubmissions] = React.useState([]);
+
   const getDetails = async (_id) => {
     const response = (await axios.get(`http://localhost:3001/car/${_id}`)).data;
     if (response.success) {
@@ -75,6 +79,7 @@ export default function DetailPage() {
         filtered.reduce((a, b) => a + b.amount, 0) / filtered.length;
       response.car.value = Math.ceil(average);
       setCarDetail(response.car);
+      setRecentSubmissions(response.recent);
     }
   };
 
@@ -113,6 +118,7 @@ export default function DetailPage() {
       })
     ).data;
     if (response.success) {
+      localStorage.setItem(carDetail._id, new Date());
       const lables = response.car?.value?.map((element) =>
         format(new Date(element.date), "yyyy-MM-dd")
       );
@@ -136,7 +142,7 @@ export default function DetailPage() {
         filtered.reduce((a, b) => a + b.amount, 0) / filtered.length;
       response.car.value = Math.ceil(average);
       setCarDetail(response.car);
-      localStorage.setItem(carDetail._id, new Date());
+      setRecentSubmissions(response.recent);
       swal("Done...", "Value updated", "success");
     } else {
       swal("Oops...", "Database is down", "error");
@@ -251,6 +257,42 @@ export default function DetailPage() {
                 <Button variant="contained" onClick={handleSubmit}>
                   Update
                 </Button>
+              </Box>
+            </Box>
+            <br />
+            <Box
+              sx={{
+                background: "#FFFFFF",
+                border: "1px solid lightgray",
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{
+                  color: "black",
+                  background: "lightgray",
+                  p: { xs: 1, nd: 2 },
+                  border: "1px solid lightgray",
+                }}
+              >
+                Recent Submissions
+              </Typography>
+
+              <Box sx={{ p: { xs: 1, md: 3 } }}>
+                <Stack direction="column">
+                  {recentSubmissions.map((item, index) => {
+                    return (
+                      <CustomCard
+                        _id={item.car._id}
+                        name={item.car.name}
+                        color={item.car.color}
+                        type={item.car.type}
+                        image={item.car.image}
+                        key={index}
+                      />
+                    );
+                  })}
+                </Stack>
               </Box>
             </Box>
           </Grid>
