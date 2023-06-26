@@ -5,22 +5,22 @@ import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { subDays } from "date-fns";
+// import { subDays } from "date-fns";
 
 import Button from "@mui/material/Button";
 
 export default function CustomCard3({ _id, name, color, type, image, value }) {
   const navigate = useNavigate();
-  const [values, SetValues] = React.useState(0);
+  // const [values, SetValues] = React.useState(0);
 
-  React.useEffect(() => {
-    const dateFrom = subDays(new Date(), 30);
-    const filtered = value.filter((item) => new Date(item.date) > dateFrom);
-    const average =
-      filtered.reduce((a, b) => a + b.amount, 0) / filtered.length;
+  // React.useEffect(() => {
+  //   const dateFrom = subDays(new Date(), 30);
+  //   const filtered = value.filter((item) => new Date(item.date) > dateFrom);
+  //   const average =
+  //     filtered.reduce((a, b) => a + b.amount, 0) / filtered.length;
 
-    SetValues(Math.ceil(average));
-  }, []);
+  //   SetValues(Math.ceil(average));
+  // }, []);
 
   return (
     <Card
@@ -51,7 +51,7 @@ export default function CustomCard3({ _id, name, color, type, image, value }) {
           gutterBottom
           sx={{ color: "#198754", fontWeight: "bold" }}
         >
-          Value : {values}
+          Value : {value}
         </Typography>
         <br />
         <Button

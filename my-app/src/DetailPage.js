@@ -52,13 +52,46 @@ export default function DetailPage() {
 
   const [recentSubmissions, setRecentSubmissions] = React.useState([]);
 
+  function calculateAverageValues(objArray) {
+    var resultArray = [];
+    var keyMap = {};
+
+    // Calculate sum and count for each date
+    for (var i = 0; i < objArray.length; i++) {
+      debugger;
+      var obj = objArray[i];
+      var date = format(new Date(obj.date), "yyyy-MM-dd");
+      var value = obj.amount;
+
+      if (!keyMap[date]) {
+        keyMap[date] = { sum: 0, count: 0 };
+      }
+
+      keyMap[date].sum += value;
+      keyMap[date].count++;
+    }
+
+    // Calculate average and push into result array
+    for (var date in keyMap) {
+      if (keyMap.hasOwnProperty(date)) {
+        var average = keyMap[date].sum / keyMap[date].count;
+        resultArray.push({ date: date, average: average });
+      }
+    }
+
+    return resultArray;
+  }
+
   const getDetails = async (_id) => {
     const response = (await axios.get(`http://localhost:3001/car/${_id}`)).data;
     if (response.success) {
-      const lables = response.car.value?.map((element) =>
+      const result = calculateAverageValues(response.car.value);
+
+      const lables = result?.map((element) =>
         format(new Date(element.date), "yyyy-MM-dd")
       );
-      const data = response.car.value?.map((element) => element.amount);
+
+      const data = result?.map((element) => element.average);
 
       setDatasets({
         labels: lables,
@@ -96,7 +129,7 @@ export default function DetailPage() {
   };
 
   const handleSubmit = async () => {
-    if (updatedValue > Math.ceil(carDetail.value) * 0.35) {
+    if (Number(updatedValue) > Math.ceil(carDetail.value) * 0.35) {
       swal("Oops...", "New value exceded 35% limit", "error");
       return;
     }
@@ -119,10 +152,19 @@ export default function DetailPage() {
     ).data;
     if (response.success) {
       localStorage.setItem(carDetail._id, new Date());
-      const lables = response.car?.value?.map((element) =>
+      // const lables = response.car?.value?.map((element) =>
+      //   format(new Date(element.date), "yyyy-MM-dd")
+      // );
+      // const data = response.car?.value?.map((element) => element.amount);
+
+      const result = calculateAverageValues(response.car.value);
+
+      const lables = result?.map((element) =>
         format(new Date(element.date), "yyyy-MM-dd")
       );
-      const data = response.car?.value?.map((element) => element.amount);
+
+      const data = result?.map((element) => element.average);
+
       setDatasets({
         labels: lables,
         datasets: [
@@ -289,7 +331,7 @@ export default function DetailPage() {
                         color={item.car.color}
                         type={item.car.type}
                         image={item.car.image}
-                        value={item.car.value}
+                        value={item.value}
                       />
                     );
                   })}
